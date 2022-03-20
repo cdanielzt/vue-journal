@@ -2,8 +2,12 @@
 // export const myGetter = ({ commit }) => {
     // return state;
 // }
+//Función que regresa otra función
+export const getEntriesByTerm = ( state ) => ( term = '') => {
+    
+    if( term.length === 0 ) return state.entries
 
-export const getEntriesByTerm = ( /*{ commit }*/) => {
+    return state.entries.filter( entry => entry.text.toLowerCase().includes( term.toLowerCase() ) )
 
 }
 
