@@ -32,6 +32,7 @@
 
         <Fab 
             icon="fa-floppy-disk"
+            @on:click="saveEntry"
         />
     </template>
 
@@ -44,7 +45,7 @@
 
 <script>
 import { defineAsyncComponent } from '@vue/runtime-core'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 import getDayMonthYear from '../helpers/getDayMonthYear'
 
@@ -83,13 +84,20 @@ export default {
     },
 
     methods: {
+        ...mapActions('journal', ['updateEntry']),
+
+        async saveEntry() {
+            console.log('Guardando entrada')
+            this.updateEntry(this.entry)
+        },
+        
         loadEntry() {
             const entry = this.getEntryById(this.id)
             
             if( !entry )  return this.$router.push({name: 'no-entry'})
 
             this.entry = entry
-        }
+        },
     },
 
     watch: {
