@@ -1,36 +1,39 @@
 <template>
-  <div class="entry-title d-flex justify-content-between p-2">
+    <template v-if="entry">
 
-      <div>
-          <span class="text-success fs-3 fw-bold">{{ day }}</span>
-          <span class="mx-1 fs-3">{{ month }}</span>
-          <span class="mx-2 fs-4 fw-light">{{ yearDay }}</span>
-      </div>
+        <div class="entry-title d-flex justify-content-between p-2">
 
-      <div>
-          <button class="btn btn-danger mx-2">
-              Borrar
-              <i class="fa fa-trash-alt"></i>
-          </button>
-          <button class="btn btn-primary mx-2">
-              Subir foto
-              <i class="fa fa-upload"></i>
-          </button>
-      </div>
-  </div>
+            <div>
+                <span class="text-success fs-3 fw-bold">{{ day }}</span>
+                <span class="mx-1 fs-3">{{ month }}</span>
+                <span class="mx-2 fs-4 fw-light">{{ yearDay }}</span>
+            </div>
 
-  <hr>
+            <div>
+                <button class="btn btn-danger mx-2">
+                    Borrar
+                    <i class="fa fa-trash-alt"></i>
+                </button>
+                <button class="btn btn-primary mx-2">
+                    Subir foto
+                    <i class="fa fa-upload"></i>
+                </button>
+            </div>
+        </div>
 
-  <div class="d-flex flex-column px-3 h-75">
-      <textarea 
-      v-model="entry.text"
-      placeholder="¿Qué sucedió hoy?"></textarea>
-  </div>
+        <hr>
+
+        <div class="d-flex flex-column px-3 h-75">
+            <textarea 
+            v-model="entry.text"
+            placeholder="¿Qué sucedió hoy?"></textarea>
+        </div>
 
 
-  <Fab 
-    icon="fa-floppy-disk"
-  />
+        <Fab 
+            icon="fa-floppy-disk"
+        />
+    </template>
 
   <img 
     src="https://definicion.de/wp-content/uploads/2008/09/campo-1.jpg" 
@@ -83,9 +86,15 @@ export default {
         loadEntry() {
             const entry = this.getEntryById(this.id)
             
-            if( !entry ) this.$router.push({name: 'no-entry'})
+            if( !entry )  return this.$router.push({name: 'no-entry'})
 
             this.entry = entry
+        }
+    },
+
+    watch: {
+        id() {
+            this.loadEntry()
         }
     },
 
