@@ -10,8 +10,9 @@
 
         <div class="entry-scrollarea">
             <Entry
-              v-for="(entry, index) in entriesByTerm"
-              :key="index"
+              v-for="entry in entriesByTerm"
+              :key="entry.id"
+              :entry="entry"
             />
         </div>
     </div>
