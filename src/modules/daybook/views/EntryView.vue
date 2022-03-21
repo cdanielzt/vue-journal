@@ -9,6 +9,14 @@
                 <span class="mx-2 fs-4 fw-light">{{ yearDay }}</span>
             </div>
 
+            <input
+                v-show="false" 
+                type="file"
+                ref="imageSelector"
+                @change="onSelectedImage"
+                accept="image/png, image/jpg"
+                >
+
             <div>
                 <button 
                     v-if="entry.id"
@@ -17,7 +25,9 @@
                     Borrar
                     <i class="fa fa-trash-alt"></i>
                 </button>
-                <button class="btn btn-primary mx-2">
+                <button 
+                    @click="onSelectImage"
+                    class="btn btn-primary mx-2">
                     Subir foto
                     <i class="fa fa-upload"></i>
                 </button>
@@ -39,8 +49,14 @@
         />
     </template>
 
-  <img 
+  <!-- <img 
     src="https://definicion.de/wp-content/uploads/2008/09/campo-1.jpg" 
+    alt="entry picture"
+    class="img-thumbnail"> -->
+
+    <img 
+    v-if="localImage"
+    :src="localImage" 
     alt="entry picture"
     class="img-thumbnail">
 
@@ -63,7 +79,9 @@ export default {
 
     data() {
         return {
-            entry: null
+            entry: null,
+            localImage: null,
+            file: null
         }
     },
 
@@ -154,6 +172,22 @@ export default {
 
             this.entry = entry
         },
+        onSelectedImage(event) {
+            const file = event.target.files[0];
+            if( !file ) {
+                this.localImage = null
+                this.file = null
+                return 
+            } 
+            this.file = file
+            const fr = new FileReader()
+            fr.onload  = () => this.localImage = fr.result
+            fr.readAsDataURL( file )
+        },
+        onSelectImage() {
+            this.$refs.imageSelector.click() 
+        }
+
     },
 
     watch: {
