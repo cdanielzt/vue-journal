@@ -49,10 +49,11 @@
         />
     </template>
 
-  <!-- <img 
-    src="https://definicion.de/wp-content/uploads/2008/09/campo-1.jpg" 
+  <img 
+    v-if="entry.picture && !localImage"
+    :src="entry.picture" 
     alt="entry picture"
-    class="img-thumbnail"> -->
+    class="img-thumbnail">
 
     <img 
     v-if="localImage"
@@ -68,6 +69,7 @@ import { mapGetters, mapActions } from 'vuex'
 import Swal from 'sweetalert2'
 
 import getDayMonthYear from '../helpers/getDayMonthYear'
+import uploadImage from '../helpers/uploadImage'
 
 export default {
     props: {
@@ -117,6 +119,10 @@ export default {
 
             Swal.showLoading()
 
+            const picture = await uploadImage( this.file )
+
+            this.entry.picture = picture
+
             if( this.entry.id ){
                 await this.updateEntry(this.entry)
                 this.$router.push({name: 'entry', params: { id: this.entry.id }})
@@ -125,7 +131,8 @@ export default {
                 const id = await this.createEntry(this.entry);
                 this.$router.push({name: 'entry', params: { id }})
             }
-
+            this.file = null
+            this.localImage = null;
             Swal.fire('Guardado', 'Entrada registrada con éxito', 'success')
         },
 
